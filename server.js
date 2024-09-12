@@ -35,3 +35,17 @@ app.get('/tarefas', (req, res) => {
        res.status(200).json(rows);
    });
 });
+
+app.get('/tarefas/:id', (req, res) => {
+   const { id } = req.params;
+   db.get("SELECT * FROM tarefas WHERE id = ?", [id], (err, row) => {
+       if (err) {
+           return res.status(500).json({ error: err.message });
+       }
+       if (row) {
+           res.status(200).json(row);
+       } else {
+           res.status(404).json({ error: 'Tarefa não encontrada!' });
+       }
+   });
+});

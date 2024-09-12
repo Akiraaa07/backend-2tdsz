@@ -16,3 +16,13 @@ db.serialize(() => {
 app.listen(PORT, () => {
    console.log(`Server is running on port ${PORT}`);
 });
+
+app.post('/tarefas', (req, res) => {
+   const { tarefa } = req.body;
+   db.run("INSERT INTO tarefas (tarefa) VALUES (?)", [tarefa], function(err) {
+       if (err) {
+           return res.status(500).json({ error: err.message });
+       }
+       res.status(201).json({ id: this.lastID, tarefa });
+   });
+});

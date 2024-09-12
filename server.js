@@ -49,3 +49,18 @@ app.get('/tarefas/:id', (req, res) => {
        }
    });
 });
+
+app.put('/tarefas/:id', (req, res) => {
+   const { id } = req.params;
+   const { tarefa } = req.body;
+   db.run("UPDATE tarefas SET tarefa = ? WHERE id = ?", [tarefa, id], function(err) {
+       if (err) {
+           return res.status(500).json({ error: err.message });
+       }
+       if (this.changes) {
+           res.status(200).json({ message: 'Tarefa atualizada com sucesso!' });
+       } else {
+           res.status(404).json({ error: 'Tarefa não encontrada!' });
+       }
+   });
+});

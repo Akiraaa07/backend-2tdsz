@@ -64,3 +64,17 @@ app.put('/tarefas/:id', (req, res) => {
        }
    });
 });
+
+app.delete('/tarefas/:id', (req, res) => {
+   const { id } = req.params;
+   db.run("DELETE FROM tarefas WHERE id = ?", [id], function(err) {
+       if (err) {
+           return res.status(500).json({ error: err.message });
+       }
+       if (this.changes) {
+           res.status(200).json({ message: 'Tarefa removida com sucesso!' });
+       } else {
+           res.status(404).json({ error: 'Tarefa não encontrada!' });
+       }
+   });
+});

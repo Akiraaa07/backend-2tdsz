@@ -1,10 +1,16 @@
 const express = require('express');
 const app = express();
+const PORT = 3000;
 
-const PORT = process.env.PORT || 5000;
+app.use(express.json());
 
-app.get('/', (req, res) => {
-   res.send('Hello World');
+// Cria um banco de dados SQLite em memória
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('lista-tarefas.db');
+
+// Cria a tabela 'tarefas' no banco de dados
+db.serialize(() => {
+    db.run("CREATE TABLE IF NOT EXISTS tarefas (id INTEGER PRIMARY KEY, tarefa TEXT)");
 });
 
 app.listen(PORT, () => {
